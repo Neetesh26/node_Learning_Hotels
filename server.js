@@ -38,8 +38,10 @@ app.post('/MenuItems' ,async function (req, res){
     }
 })
 
+//require page person route
 const personroutes = require('./routes/personsroutes') 
 
+// middleware use person route
 app.use('/person',personroutes)
 
 app.listen(3000);
