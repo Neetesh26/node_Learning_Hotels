@@ -7,16 +7,17 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json())  // req.body
 
 
+// middleware function 
+const loginreq =(req, res, next)=>{
+  console.log(`[ ${new Date().toLocaleString()} ] Request made to : ${req.originalUrl}`);
+  next()
+}
 
-
-
-
-app.get("/", function (req, res) {
+// app.use(loginreq)
+app.get("/",loginreq, function (req, res) {
   res.send("Hello World");
   console.log("server start :");
 });
-
-
 
 
 
