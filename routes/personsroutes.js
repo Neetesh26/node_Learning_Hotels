@@ -35,7 +35,7 @@ router.post("/", async function (req, res) {
       try {
           const data = await person.find()
           console.log("data fetched");
-      res.status(200).json(data);
+          res.status(200).json(data);
       } catch (error) {
           console.log(error)
           res.status(500).json({error: "internal server error"})

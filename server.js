@@ -18,10 +18,10 @@ const loginreq =(req, res, next)=>{
 
 
 app.use(passport.initialize())
+const authenticate = passport.authenticate('local', {session:false}) // stratergy name 'local' , session false;
 
-const authenticate =passport.authenticate('local', {session:false}) // stratergy name 'local' , session false;
 // app.use(loginreq)
-app.get("/", /* loginreq */authenticate  , function (req, res) {
+app.get("/", /* loginreq */ function (req, res) {
   res.send("Hello World");
   console.log("server start :");
 });
