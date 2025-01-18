@@ -6,7 +6,7 @@ const router = express.Router()
 const person = require("../models/persons");
 
 
-router.post("/", async function (req, res) {
+router.post("/signup", async function (req, res) {
     try {
       // res.send("data is saved");
       const data = req.body;
