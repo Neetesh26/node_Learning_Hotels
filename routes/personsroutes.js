@@ -22,19 +22,69 @@ router.post("/signup", async function (req, res) {
     const datasaved = await newPerson.save();
     console.log("data saved");
 
-    // const token = generatetoken(datasaved.username)
-    // console.log("token is : ", token);
+    //send data in payload to generate token
+    const payload={
+      id :datasaved.id,
+      username:datasaved.username
+    }
+    console.log(JSON.stringify(payload));
+    
+    const token = generatetoken(datasaved.username)
+    console.log("token is : ", token);
 
-    // res.status(200).json({ datasaved: datasaved , token: token});
-    res.status(200).json({ datasaved});
+    res.status(200).json({ datasaved: datasaved , token: token});
+
+    // res.status(200).json({ datasaved});
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "internal server error" });
   }
 });
 
+router.post("/login", async function(req,res){
+  try {
+      const {username,password} = req.body
+      // console.log("username : ", username);
+      // console.log("password : ", password);
+
+      const user =await person.findOne({username:username})
+
+      if(!user || !(await user.comparePassword(password))){
+        return res.status(401).json({error:"invalid username or password"})
+      }
+
+      const payload ={
+        id:user.id,
+        username:user.username
+      }
+      const token = generatetoken(payload)
+      res.status(200).json({token:token})
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({error:"internal server error"})
+  }
+ 
+})
+
+router.get('/profile',jwtMiddleware , async (req,res)=>{
+   try {
+    const userdata = req.user
+   console.log('userdata' , userdata);
+
+   const userId = userdata.id
+   const user = await person.findById(userId)
+   res.status(200).json(user);
+
+   } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "internal server error" });
+   }
+})
+
+
 //data find all user--->
-router.get("/", async (req, res) => {
+router.get("/",jwtMiddleware, async (req, res) => { // jwtmiddleware autentication
   try {
     const data = await person.find();
     console.log("data fetched");
